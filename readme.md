@@ -1,5 +1,6 @@
 # Member Claims
 
+- Status: **Incomplete**
 - Version: 0.1 beta
 - Author: Craig Zheng
 - Build Date: 18 May 2011
