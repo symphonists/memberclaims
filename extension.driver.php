@@ -22,6 +22,7 @@
 				'CREATE TABLE `tbl_member_claims` (
 					`id` int(11) unsigned NOT NULL auto_increment,
 					`entry_id` int(11) unsigned NOT NULL,
+					`field_id` int(11) unsigned NOT NULL,
 					`member_id` int(11) unsigned NOT NULL,
 					PRIMARY KEY (`id`),
 					KEY `entry_id` (`entry_id`),
