@@ -24,7 +24,7 @@
 				FROM `tbl_member_claims`
 				WHERE `entry_id` = '{$entry_id}'
 				AND `field_id` = '{$field_id}'
-				AND `member_id` = '{$member-id}'
+				AND `member_id` = '{$member_id}'
 			");
 			
 			if(!empty($result)) {
@@ -78,7 +78,7 @@
 			
 			$data = array(
 				'entry_id'	=> $entry_id,
-				'field_id'	=> $field_id
+				'field_id'	=> $field_id,
 				'member_id'	=> $member_id
 			);
 			
@@ -128,7 +128,7 @@
 			$count = $this->countMembers($entry_id, $field_id);
 			
 			$fields = array(
-				'count'	=> $count;
+				'count'	=> $count
 			);
 			
 			return Symphony::Database()->update(

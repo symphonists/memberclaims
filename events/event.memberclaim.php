@@ -46,13 +46,14 @@
 			
 			$errors = array();
 			
-			// validation step
-			if (is_null($member_id)) {
+			// Validate the required data
+			if(is_null($member_id)) {
 				$errors[] = 'Member not logged in';
-			} elseif (is_null($entry_id)) {
+			}
+			elseif (is_null($entry_id)) {
 				$errors[] = 'No entry ID provided';
 			}
-			} elseif (is_null($field_id)) {
+			elseif (is_null($field_id)) {
 				$errors[] = 'No field ID provided';
 			}
 			
