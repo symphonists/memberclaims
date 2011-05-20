@@ -82,9 +82,9 @@
 				'member_id'	=> $member_id
 			);
 			
-			Symphony::Database()->insert($data, 'tbl_member_claims');
-			
-			return $this->updateCount($entry_id, $field_id);
+			$try = Symphony::Database()->insert($data, 'tbl_member_claims');
+
+			return Claims::updateCount($entry_id, $field_id);
 		}
 		
 		/**
@@ -102,7 +102,7 @@
 					`member_id` = '{$member_id}'
 			");
 			
-			return $this->updateCount($entry_id, $field_id);
+			return Claims::updateCount($entry_id, $field_id);
 		}
 	
 	/*-------------------------------------------------------------------------
@@ -124,17 +124,20 @@
 			return $results[0]['count'];
 		}
 		
+		/**
+		 * Given an entry id and field id, update the field's claim count
+		 */
 		public function updateCount($entry_id, $field_id) {
-			$count = $this->countMembers($entry_id, $field_id);
+			$count = Claims::countMembers($entry_id, $field_id);
 			
 			$fields = array(
 				'count'	=> $count
 			);
 			
-			return Symphony::Database()->update(
-				$fields,
-				'tbl_entries_data_' . $field_id,
-				'`entry_id` = ' . $entry_id
-			);
+			return Symphony::Database()->query("
+				REPLACE INTO `tbl_entries_data_{$field_id}`
+				(entry_id, count)
+				VALUES ({$entry_id}, {$count})
+			");
 		}
 	}

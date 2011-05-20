@@ -160,7 +160,10 @@
 			if($value != '') {
 				$wrapper->appendChild(new XMLElement(
 					$this->get('element_name') . '-' . $mode,
-					$value
+					$value,
+					array(
+						'field-id'	=> $field_id
+					)
 				));
 			}
 		}

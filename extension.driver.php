@@ -26,6 +26,7 @@
 					`member_id` int(11) unsigned NOT NULL,
 					PRIMARY KEY (`id`),
 					KEY `entry_id` (`entry_id`),
+					KEY `field_id` (`field_id`),
 					KEY `member_id` (`member_id`)
 				);');
 				
