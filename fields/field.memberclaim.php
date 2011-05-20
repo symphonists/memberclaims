@@ -85,7 +85,31 @@
 							$postfix = null,
 							$entry_id = null
 		) {
-			// TODO: Label and paragraph displaying count
+			$value = $data['count'];
+			$label = Widget::Label($this->get('label'));
+			
+			$p = new XMLElement('p', $value);
+			$label->appendChild($p);
+			
+			$wrapper->appendChild($label);
+		}
+		
+		function displayDatasourceFilterPanel(
+							&$wrapper,
+							$data=NULL,
+							$errors=NULL,
+							$fieldnamePrefix=NULL,
+							$fieldnamePostfix=NULL
+		) {
+			$wrapper->appendChild(
+				new XMLElement(
+					'h4',
+					$this->get('label') . ' <i>'.$this->Name().'</i>'
+				)
+			);
+			$label = Widget::Label('Count');
+			$label->appendChild(Widget::Input('fields[filter]'.($fieldnamePrefix ? '['.$fieldnamePrefix.']' : '').'['.$this->get('id').']'.($fieldnamePostfix ? '['.$fieldnamePostfix.']' : ''), ($data ? General::sanitize($data) : NULL)));
+			$wrapper->appendChild($label);
 		}
 		
 		public function processRawFieldData(
@@ -109,9 +133,8 @@
 
 		public function fetchIncludableElements() { 
 			return array(
-				$this->get('element_name') . ': count',
-				$this->get('element_name') . ': ids',
-				$this->get('element_name') . ': current-member',
+				$this->get('element_name'),
+				$this->get('element_name') . ': list',
 			);
 		}
 		
@@ -123,49 +146,47 @@
 							$entry_id = null
 		) {
 		
+			// Grab the field's ID
 			$field_id = $this->get('id');
-		
-			// Mode is count so just return the number
-			if($mode == 'count') {
-				$value = $data['count'];
+			
+			// Grab the claim count
+			$count = $data['count'];
+			
+			// Determine if the current member is a claimant
+			if($member_id = Frontend::instance()->Page()->_param['member-id']) {
+						
+				if(Claims::check($entry_id, $field_id, $member_id)) {
+					$current = 'Yes';
+				}
+				else {
+					$current = 'No';
+				}
 			}
+			
+			$output = new XMLElement(
+				$this->get('element_name'),
+				NULL,
+				array(
+					'count'				=> $count,
+					'field-id'			=> $field_id,
+					'current-member'	=> $current
+				)
+			);
 			
 			// Mode is ids, so fetch those
-			elseif($mode == 'ids') {
+			if($mode == 'list') {
 				$results = Claims::fetchMembers($entry_id, $field_id);
 				
-				// TODO: Turn this into XML elements
 				foreach($results as $index => $result) {
-					$results[$index] = $result['member_id'];
-				}
-				$value = implode($results);
-			}
-			
-			elseif ($mode == 'current-member') {
-				// Checking if there's a currently-logged-in member, and if so,
-				// whether they're a claimant	
-				if($current_member = Frontend::instance()->Page()->_param['member-id']) {
-										
-					if(Claims::check($entry_id, $field_id, $member_id)) {
-						$value = 'Yes';
-					}
-					else {
-						$value = 'No';
-					}
+					$item = new XMLElement(
+						'item',
+						$result['member_id']
+					);
+					$output->appendChild($item);
 				}
 			}
 
-			// If there's a value, build an output element appending $mode
-			// to the name. E.g. <claims-count> or <claims-ids>
-			if($value != '') {
-				$wrapper->appendChild(new XMLElement(
-					$this->get('element_name') . '-' . $mode,
-					$value,
-					array(
-						'field-id'	=> $field_id
-					)
-				));
-			}
+			$wrapper->appendChild($output);
 		}
 		
 		public function prepareTableValue($data, XMLElement $link=NULL) {
