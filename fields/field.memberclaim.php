@@ -89,7 +89,7 @@
 							$postfix = null,
 							$entry_id = null
 		) {
-			$value = $data['count'];
+			$value = (!is_null($data['count']) ? $data['count'] : '0');
 			$label = Widget::Label($this->get('label'));
 			
 			$p = new XMLElement('p', $value);
