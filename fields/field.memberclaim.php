@@ -247,7 +247,8 @@
 							&$sort,
 							$order='ASC'
 		) {
-			// TODO: Sorting by count
+			$joins .= "LEFT OUTER JOIN `tbl_entries_data_".$this->get('id')."` AS `ed` ON (`e`.`id` = `ed`.`entry_id`) ";
+			$sort = 'ORDER BY ' . (in_array(strtolower($order), array('random', 'rand')) ? 'RAND()' : "`ed`.`count` $order");
 		}
 	
 	}
