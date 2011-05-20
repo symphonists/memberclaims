@@ -89,13 +89,17 @@
 							$postfix = null,
 							$entry_id = null
 		) {
-			$value = (!is_null($data['count']) ? $data['count'] : '0');
-			$label = Widget::Label($this->get('label'));
+		
+			if(!is_null($data['count'])) {
+				$value = $data['count'];
+
+				$label = Widget::Label($this->get('label'));
 			
-			$p = new XMLElement('p', $value);
-			$label->appendChild($p);
+				$p = new XMLElement('p', $value);
+				$label->appendChild($p);
 			
-			$wrapper->appendChild($label);
+				$wrapper->appendChild($label);
+			}
 		}
 		
 		public function processRawFieldData(
