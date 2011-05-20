@@ -17,6 +17,10 @@
 			return true;
 		}
 		
+		public function canFilter(){
+			return true;
+		}
+		
 	/*-------------------------------------------------------------------------
 		Setup:
 	-------------------------------------------------------------------------*/
@@ -91,24 +95,6 @@
 			$p = new XMLElement('p', $value);
 			$label->appendChild($p);
 			
-			$wrapper->appendChild($label);
-		}
-		
-		function displayDatasourceFilterPanel(
-							&$wrapper,
-							$data=NULL,
-							$errors=NULL,
-							$fieldnamePrefix=NULL,
-							$fieldnamePostfix=NULL
-		) {
-			$wrapper->appendChild(
-				new XMLElement(
-					'h4',
-					$this->get('label') . ' <i>'.$this->Name().'</i>'
-				)
-			);
-			$label = Widget::Label('Count');
-			$label->appendChild(Widget::Input('fields[filter]'.($fieldnamePrefix ? '['.$fieldnamePrefix.']' : '').'['.$this->get('id').']'.($fieldnamePostfix ? '['.$fieldnamePostfix.']' : ''), ($data ? General::sanitize($data) : NULL)));
 			$wrapper->appendChild($label);
 		}
 		
@@ -189,8 +175,62 @@
 			$wrapper->appendChild($output);
 		}
 		
-		public function prepareTableValue($data, XMLElement $link=NULL) {
+		public function prepareTableValue(
+							$data,
+							XMLElement $link=NULL
+		) {
 			return $data['count'];
+		}
+		
+	/*-------------------------------------------------------------------------
+		Filtering:
+	-------------------------------------------------------------------------*/
+	
+		public function displayDatasourceFilterPanel(
+							&$wrapper,
+							$data=NULL,
+							$errors=NULL,
+							$fieldnamePrefix=NULL,
+							$fieldnamePostfix=NULL
+		) {
+			$wrapper->appendChild(
+				new XMLElement(
+					'h4',
+					$this->get('label') . ' <i>'.$this->Name().'</i>'
+				)
+			);
+			
+			$label = Widget::Label('Member IDs');
+			
+			$label->appendChild(
+				Widget::Input(
+					'fields[filter]' . 
+						($fieldnamePrefix ? '['.$fieldnamePrefix.']' : '') . 
+						'['.$this->get('id').']' . 
+						($fieldnamePostfix ? '['.$fieldnamePostfix.']' : ''),
+					($data ? General::sanitize($data) : NULL)
+				)
+			);
+			$wrapper->appendChild($label);
+			
+			// {$member-id} hint
+			$optionlist = new XMLElement('ul');
+			$optionlist->setAttribute('class', 'tags singular');
+			$optionlist->appendChild(new XMLElement('li', '{$member-id}'));
+			$wrapper->appendChild($optionlist);
+		}
+		
+		public function buildDSRetrivalSQL(
+							$data,
+							&$joins,
+							&$where,
+							$andOperation=false
+		) {
+			$joins .= " LEFT JOIN
+							`tbl_member_claims` AS `claim`
+							ON (`e`.`id` = `claim`.entry_id)";
+			$where .= " AND `claim`.member_id = ('".implode("', '", $data)."')";
+			return true;
 		}
 		
 	/*-------------------------------------------------------------------------
