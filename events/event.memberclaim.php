@@ -53,19 +53,19 @@
 			$member_id = Frontend::instance()->Page()->_param['member-id'];
 			
 			// Set the entry id and field id from POST
-			$entry_id = int($_POST['entry-id']);
-			$field_id = int($_POST['field-id']);
+			$entry_id = intval($_POST['entry-id']);
+			$field_id = intval($_POST['field-id']);
 			
 			$errors = array();
 			
 			// Validate the required data
-			if(is_null($member_id)) {
+			if (is_null($member_id) || !$member_id) {
 				$errors[] = __('No member logged in');
 			}
-			elseif (is_null($entry_id)) {
+			elseif (is_null($entry_id) || !$entry_id) {
 				$errors[] = __('No entry ID provided');
 			}
-			elseif (is_null($field_id)) {
+			elseif (is_null($field_id || !$field_id)) {
 				$errors[] = __('No field ID provided');
 			}
 			
