@@ -53,8 +53,8 @@
 			$member_id = Frontend::instance()->Page()->_param['member-id'];
 			
 			// Set the entry id and field id from POST
-			$entry_id = $_POST['entry-id'];
-			$field_id = $_POST['field-id'];
+			$entry_id = int($_POST['entry-id']);
+			$field_id = int($_POST['field-id']);
 			
 			$errors = array();
 			
