@@ -5,8 +5,8 @@
 		public function about() {
 			return array(
 				'name' 			=> 'Member Claims',
-				'version' 		=> '0.1 beta',
-				'release-date'	=> '18 May 2011',
+				'version' 		=> '0.2 beta',
+				'release-date'	=> '14 Sep 2011',
 				'author' => array(
 					'name'		=> 'Craig Zheng',
 					'website'	=> 'http://mongrl.com',

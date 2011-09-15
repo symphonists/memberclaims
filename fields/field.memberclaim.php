@@ -142,15 +142,13 @@
 			// Grab the claim count
 			$count = $data['count'];
 			
+			$current = 'No';
 			// Determine if the current member is a claimant
 			if($member_id = Frontend::instance()->Page()->_param['member-id']) {
-						
-				if(Claims::check($entry_id, $field_id, $member_id)) {
-					$current = 'Yes';
-				}
-				else {
-					$current = 'No';
-				}
+
+			    if(Claims::check($entry_id, $field_id, $member_id)) {
+			        $current = 'Yes';
+			    }
 			}
 			
 			$output = new XMLElement(
