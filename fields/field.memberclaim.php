@@ -231,7 +231,7 @@
 			$joins .= " LEFT JOIN
 							`tbl_member_claims` AS `claim`
 							ON (`e`.`id` = `claim`.entry_id)";
-			$where .= " AND `claim`.member_id = ('".implode("', '", $data)."')";
+			$where .= " AND `claim`.field_id = ". $this->get('id'). " AND `claim`.member_id = ('".implode("', '", $data)."')";
 			return true;
 		}
 		
