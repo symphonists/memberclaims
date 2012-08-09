@@ -8,8 +8,8 @@
 		Definition:
 	-------------------------------------------------------------------------*/
 
-		public function __construct(&$parent) {
-			parent::__construct($parent);
+		public function __construct() {
+			parent::__construct();
 			$this->_name = __('Member Claim');
 		}
 		
@@ -71,7 +71,7 @@
 				LIMIT 1
 			");
 
-			return $this->Database->insert(
+			return Symphony::Database()->insert(
 				$fields,
 				"tbl_fields_{$handle}"
 			);
@@ -105,6 +105,7 @@
 		public function processRawFieldData(
 							$data,
 							&$status,
+							&$message=NULL,
 							$simulate=false,
 							$entry_id=NULL
 		) {
@@ -195,12 +196,10 @@
 							$fieldnamePrefix=NULL,
 							$fieldnamePostfix=NULL
 		) {
-			$wrapper->appendChild(
-				new XMLElement(
-					'h4',
-					$this->get('label') . ' <i>'.$this->Name().'</i>'
-				)
-			);
+			$header = new XMLElement('header');
+			$header->appendChild(new XMLElement('h4', $this->get('label')));
+			$header->appendChild(new XMLElement('span', $this->name()));
+			$wrapper->appendChild($header);
 			
 			$label = Widget::Label('Member IDs');
 			
@@ -222,7 +221,7 @@
 			$wrapper->appendChild($optionlist);
 		}
 		
-		public function buildDSRetrivalSQL(
+		public function buildDSRetrievalSQL(
 							$data,
 							&$joins,
 							&$where,
