@@ -1,11 +1,11 @@
 # Member Claims
 
 - Status: **Untested**
-- Version: 0.2 beta
+- Version: 0.3 beta
 - Author: Craig Zheng
-- Build Date: 14 Sep 2011
+- Build Date: 25 February 2013
 - Requirements:
-	- [Symphony 2.2](https://github.com/symphonycms/symphony-2) or higher
+	- [Symphony 2.3](https://github.com/symphonycms/symphony-2) or higher
 	- [Members 1.0](https://github.com/symphonycms/members) or higher
 	
 ## Description

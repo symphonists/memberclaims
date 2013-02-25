@@ -1,25 +1,10 @@
 <?php
 
 	Class extension_Memberclaims extends Extension {
-		
-		public function about() {
-			return array(
-				'name' 			=> 'Member Claims',
-				'version' 		=> '0.2 beta',
-				'release-date'	=> '14 Sep 2011',
-				'author' => array(
-					'name'		=> 'Craig Zheng',
-					'website'	=> 'http://mongrl.com',
-					'email'		=> 'craig@symphony-cms.com'
-				),
-				'description'	=> 'Unique Member-to-Entry actions'
-			);
-		}
-	
+
 		public function install() {
-		
 			Symphony::Database()->query(
-				'CREATE TABLE `tbl_member_claims` (
+				'CREATE TABLE IF NOT EXISTS `tbl_member_claims` (
 					`id` int(11) unsigned NOT NULL auto_increment,
 					`entry_id` int(11) unsigned NOT NULL,
 					`field_id` int(11) unsigned NOT NULL,
@@ -28,22 +13,24 @@
 					KEY `entry_id` (`entry_id`),
 					KEY `field_id` (`field_id`),
 					KEY `member_id` (`member_id`)
-				);');
-				
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;'
+			);
+
 			Symphony::Database()->query("
 				CREATE TABLE IF NOT EXISTS `tbl_fields_memberclaim` (
 				  `id` int(11) unsigned NOT NULL auto_increment,
 				  `field_id` int(11) unsigned NOT NULL,
 				  PRIMARY KEY (`id`),
 				  UNIQUE KEY `field_id` (`field_id`)
-				) ENGINE=MyISAM;
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 			");
-			return;
+
+			return true;
 		}
-		
+
 		public function uninstall() {
 			Symphony::Database()->query(
-				'DROP TABLE `tbl_member_claims`;'
+				'DROP TABLE IF EXISTS `tbl_member_claims`, `tbl_fields_memberclaim`;'
 			);
 		}
 	}
