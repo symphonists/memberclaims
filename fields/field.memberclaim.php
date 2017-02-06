@@ -8,8 +8,8 @@
 		Definition:
 	-------------------------------------------------------------------------*/
 
-		public function __construct(&$parent) {
-			parent::__construct($parent);
+		public function __construct() {
+			parent::__construct();
 			$this->_name = __('Member Claim');
 		}
 		
@@ -71,7 +71,7 @@
 				LIMIT 1
 			");
 
-			return $this->Database->insert(
+			return Symphony::Database()->insert(
 				$fields,
 				"tbl_fields_{$handle}"
 			);
@@ -222,7 +222,7 @@
 			$wrapper->appendChild($optionlist);
 		}
 		
-		public function buildDSRetrivalSQL(
+		public function buildDSRetrievalSQL(
 							$data,
 							&$joins,
 							&$where,
@@ -232,6 +232,7 @@
 							`tbl_member_claims` AS `claim`
 							ON (`e`.`id` = `claim`.entry_id)";
 			$where .= " AND `claim`.field_id = ". $this->get('id'). " AND `claim`.member_id = ('".implode("', '", $data)."')";
+			
 			return true;
 		}
 		
